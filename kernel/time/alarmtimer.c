@@ -292,7 +292,6 @@ static enum hrtimer_restart alarmtimer_fired(struct hrtimer *timer)
 	int restart = ALARMTIMER_NORESTART;
 
 	spin_lock_irqsave(&base->lock, flags);
-	alarmtimer_dequeue(base, alarm);
 	spin_unlock_irqrestore(&base->lock, flags);
 
 	if (alarm->function)

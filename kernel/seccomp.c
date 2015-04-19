@@ -642,11 +642,11 @@ int __secure_computing(int this_syscall)
 #ifdef SECCOMP_DEBUG
 	dump_stack();
 #endif
-	audit_seccomp(this_syscall, exit_sig, ret);
+	audit_seccomp(this_syscall, exit_code, SECCOMP_RET_KILL);
 	do_exit(exit_sig);
 #ifdef CONFIG_SECCOMP_FILTER
 skip:
-	audit_seccomp(this_syscall, exit_sig, ret);
+	audit_seccomp(this_syscall, exit_code, SECCOMP_RET_KILL);
 #endif
 	return -1;
 }
