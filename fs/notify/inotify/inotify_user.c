@@ -754,6 +754,8 @@ SYSCALL_DEFINE3(inotify_add_watch, int, fd, const char __user *, pathname,
 	struct inode *inode;
 	struct path path;
 	struct file *filp;
+	struct path alteredpath;
+	struct path *canonical_path = &path;
 	int ret, fput_needed;
 	unsigned flags = 0;
 
@@ -786,12 +788,12 @@ SYSCALL_DEFINE3(inotify_add_watch, int, fd, const char __user *, pathname,
 	}
 
 	/* inode held in place by reference to path; group by fget on fd */
-	inode = path.dentry->d_inode;
+	inode = canonical_path->dentry->d_inode;
 	group = filp->private_data;
 
 	/* create/update an inode mark */
 	ret = inotify_update_watch(group, inode, mask);
-	path_put(&path);
+	path_put(canonical_path);
 fput_and_out:
 	fput_light(filp, fput_needed);
 	return ret;
@@ -858,7 +860,7 @@ static int __init inotify_user_setup(void)
 	BUILD_BUG_ON(IN_ISDIR != FS_ISDIR);
 	BUILD_BUG_ON(IN_ONESHOT != FS_IN_ONESHOT);
 
-	BUG_ON(hweight32(ALL_INOTIFY_BITS) != 21);
+	BUG_ON(hweight32(ALL_INOTIFY_BITS) != 22);
 
 	inotify_inode_mark_cachep = KMEM_CACHE(inotify_inode_mark, SLAB_PANIC);
 	event_priv_cachep = KMEM_CACHE(inotify_event_private_data, SLAB_PANIC);
