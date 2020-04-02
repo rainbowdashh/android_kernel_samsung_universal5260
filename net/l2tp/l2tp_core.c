@@ -1198,6 +1198,9 @@ again:
 
 			hlist_del_init(&session->hlist);
 
+			if (test_and_set_bit(0, &session->dead))
+				goto again;
+
 			/* Since we should hold the sock lock while
 			 * doing any unbinding, we need to release the
 			 * lock we're holding before taking that lock.
