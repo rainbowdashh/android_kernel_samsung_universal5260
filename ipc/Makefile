@@ -2,6 +2,9 @@
 # Makefile for the linux ipc.
 #
 
+ccflags-y += -Wno-uninitialized
+ccflags-y += -Wno-maybe-uninitialized
+
 obj-$(CONFIG_SYSVIPC_COMPAT) += compat.o
 obj-$(CONFIG_SYSVIPC) += util.o msgutil.o msg.o sem.o shm.o ipcns_notifier.o syscall.o
 obj-$(CONFIG_SYSVIPC_SYSCTL) += ipc_sysctl.o
