@@ -222,7 +222,6 @@ static long alarm_do_ioctl(struct file *file, unsigned int cmd,
 	int rv = 0;
 	unsigned long flags;
 	enum android_alarm_type alarm_type = ANDROID_ALARM_IOCTL_TO_TYPE(cmd);
-	uint32_t alarm_type_mask = 1U << alarm_type;
 #if defined(CONFIG_RTC_ALARM_BOOT)
 	char bootalarm_data[14];
 #endif

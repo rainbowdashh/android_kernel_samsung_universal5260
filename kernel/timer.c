@@ -993,17 +993,9 @@ int try_to_del_timer_sync(struct timer_list *timer)
 
 	base = lock_timer_base(timer, &flags);
 
-	if (base->running_timer == timer)
-		goto out;
+	if (base->running_timer != timer) {
+ 		ret = detach_if_pending(timer, base, true);
 
-	timer_stats_timer_clear_start_info(timer);
-	ret = 0;
-	if (timer_pending(timer)) {
-		detach_timer(timer, 1);
-		if (timer->expires == base->next_timer &&
-		    !tbase_get_deferrable(timer->base))
-			base->next_timer = base->timer_jiffies;
-		ret = 1;
 	}
 	spin_unlock_irqrestore(&base->lock, flags);
 
